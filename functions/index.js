@@ -17,11 +17,13 @@ function isEmpty(checkValue) {
 
 exports.onWriteProductList = functions
     .region(REGION)
-    .firestore.document("/product_list/{documentId}")
+    .firestore.document("customer_list/{customer_id}/product_list/{product_id}")
     .onWrite(async (snap, context) => {
 
         const data = snap.after.data();
         const before = snap.before.data();
+        const customer_id = context.params.customer_id;
+        const product_id = context.params.product_id;
 
         if (isEmpty(data)) {
             return;
@@ -31,7 +33,7 @@ exports.onWriteProductList = functions
         if (!isEmpty(before)) {
             console.log("aaaa >>>>");
             if (data.category != before.category) {
-                const rs = await db.collection('tranfer_list').where("product_ref", "==", snap.after.ref).get();
+                const rs = await db.collection('customer_list/' + customer_id + '/tranfer_list').where("product_ref", "==", snap.after.ref).get();
                 for (var i = 0; i < rs.size; i++) {
                     db.doc(rs.docs[i].ref.path).update({ product_cate: data.category });
                 }
