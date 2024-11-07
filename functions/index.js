@@ -24,7 +24,7 @@ function isEmpty(checkValue) {
 exports.helloWorld = functions.region(REGION).https
     .onRequest((request, response) => {
         let provinces = [];
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 2; i++) {
             provinces[i] = 'กทม' + i;
         }
         sendToTelegram("tttt");
